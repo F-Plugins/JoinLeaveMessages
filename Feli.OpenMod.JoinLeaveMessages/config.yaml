@@ -1,0 +1,8 @@
+﻿joinMessage:
+  enabled: true
+  showCountry: true
+  customIconUrl: "" # Leave empty if you dont want a custom icon
+
+leaveMessage:
+  enabled: false
+  customIconUrl: "" # Leave empty if you dont want a custom icon

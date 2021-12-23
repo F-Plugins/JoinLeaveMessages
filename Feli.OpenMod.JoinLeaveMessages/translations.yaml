@@ -1,0 +1,3 @@
+﻿join: "<color=yellow>{User.DisplayName} has connected to the server from {Country}</color>"
+
+leave: "<color=red>{User.DisplayName} disconnected from the server</color>"

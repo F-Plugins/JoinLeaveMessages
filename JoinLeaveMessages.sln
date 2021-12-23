@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31507.150
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Feli.RocketMod.JoinLeaveMessages", "Feli.RocketMod.JoinLeaveMessages\Feli.RocketMod.JoinLeaveMessages.csproj", "{08FF9D72-C231-4D97-AD3F-ACA689ACFD9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Feli.OpenMod.JoinLeaveMessages", "Feli.OpenMod.JoinLeaveMessages\Feli.OpenMod.JoinLeaveMessages.csproj", "{85885DFC-62EF-498D-BCA7-94C802D92A8F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{08FF9D72-C231-4D97-AD3F-ACA689ACFD9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08FF9D72-C231-4D97-AD3F-ACA689ACFD9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08FF9D72-C231-4D97-AD3F-ACA689ACFD9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08FF9D72-C231-4D97-AD3F-ACA689ACFD9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85885DFC-62EF-498D-BCA7-94C802D92A8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85885DFC-62EF-498D-BCA7-94C802D92A8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85885DFC-62EF-498D-BCA7-94C802D92A8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85885DFC-62EF-498D-BCA7-94C802D92A8F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C85823A8-B908-49C5-AB36-45A880AB1D43}
+	EndGlobalSection
+EndGlobal
