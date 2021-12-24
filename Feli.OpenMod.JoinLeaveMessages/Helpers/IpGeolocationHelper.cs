@@ -19,21 +19,21 @@ namespace Feli.OpenMod.JoinLeaveMessages.Helpers
 
         public async Task<string> GetCountryFromIpAsync(string address)
         {
-            var respnse = await _client.GetAsync($"http://ip-api.com/json/{address}?fields=status,message,country");
+            var response = await _client.GetAsync($"http://ip-api.com/json/{address}?fields=status,message,country");
 
-            if (!respnse.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError($"HTTP Error: {(int)respnse.StatusCode}, {respnse.StatusCode}");
+                _logger.LogError("HTTP Error: {StatusCode}, {StatusCodeString}", (int)response.StatusCode, response.StatusCode.ToString());
                 return string.Empty;
             }
 
-            var content = await respnse.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync();
 
             var @object = JObject.Parse(content);
 
             if (@object["status"].ToString() == "fail")
             {
-                _logger.LogError($"Failed to get the ip location. Error: {@object["message"]}");
+                _logger.LogError("Failed to get the ip location. Error: {message}", @object["message"].ToString());
                 return string.Empty;
             }
 

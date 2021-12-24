@@ -10,15 +10,15 @@ namespace Feli.RocketMod.JoinLeaveMessages.Helpers
         {
             var client = new HttpClient();
 
-            var respnse = client.GetAsync($"http://ip-api.com/json/{address}?fields=status,message,country").GetAwaiter().GetResult();
+            var response = client.GetAsync($"http://ip-api.com/json/{address}?fields=status,message,country").GetAwaiter().GetResult();
 
-            if (!respnse.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                Logger.LogError($"HTTP Error: {(int)respnse.StatusCode}, {respnse.StatusCode}");
+                Logger.LogError($"HTTP Error: {(int)response.StatusCode}, {response.StatusCode}");
                 return string.Empty;
             }
 
-            var content = respnse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var content = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
             var @object = JObject.Parse(content);
 
