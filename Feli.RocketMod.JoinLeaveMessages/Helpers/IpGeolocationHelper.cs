@@ -12,6 +12,8 @@ namespace Feli.RocketMod.JoinLeaveMessages.Helpers
 
             var response = client.GetAsync($"http://ip-api.com/json/{address}?fields=status,message,country").GetAwaiter().GetResult();
 
+            client.Dispose();
+
             if (!response.IsSuccessStatusCode)
             {
                 Logger.LogError($"HTTP Error: {(int)response.StatusCode}, {response.StatusCode}");
