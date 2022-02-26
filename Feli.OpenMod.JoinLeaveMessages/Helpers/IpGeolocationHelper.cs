@@ -1,33 +1,33 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Net.Http;
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Feli.OpenMod.JoinLeaveMessages.Helpers
 {
-    public class IpGeolocationHelper : IDisposable
+    public class IpGeolocationHelper
     {
         private readonly ILogger<IpGeolocationHelper> _logger;
-        private readonly HttpClient _client;
 
         public IpGeolocationHelper(ILogger<IpGeolocationHelper> logger)
         {
             _logger = logger;
-            _client = new HttpClient();
         }
 
         public async Task<string> GetCountryFromIpAsync(string address)
         {
-            var response = await _client.GetAsync($"http://ip-api.com/json/{address}?fields=status,message,country");
+            var request = CreateRequest(address);
 
-            if (!response.IsSuccessStatusCode)
+            var response = (HttpWebResponse)await request.GetResponseAsync();
+
+            if (response.StatusCode != HttpStatusCode.OK)
             {
                 _logger.LogError("HTTP Error: {StatusCode}, {StatusCodeString}", (int)response.StatusCode, response.StatusCode.ToString());
                 return string.Empty;
             }
 
-            var content = await response.Content.ReadAsStringAsync();
+            var content = await ReadContentAsync(response.GetResponseStream());
 
             var @object = JObject.Parse(content);
 
@@ -40,9 +40,16 @@ namespace Feli.OpenMod.JoinLeaveMessages.Helpers
             return @object["country"].ToString();
         }
 
-        public void Dispose()
+        internal WebRequest CreateRequest(string address)
         {
-            _client.Dispose();
+            return WebRequest.Create($"http://ip-api.com/json/{address}?fields=status,message,country");
+        }
+
+        internal async Task<string> ReadContentAsync(Stream stream)
+        {
+            using var reader = new StreamReader(stream);
+
+            return await reader.ReadToEndAsync();
         }
     }
 }

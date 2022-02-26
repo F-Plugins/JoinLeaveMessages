@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Rocket.Core.Logging;
-using System.Net.Http;
+using System.IO;
+using System.Net;
 
 namespace Feli.RocketMod.JoinLeaveMessages.Helpers
 {
@@ -8,19 +9,17 @@ namespace Feli.RocketMod.JoinLeaveMessages.Helpers
     {
         public static string GetCountryFromIp(string address)
         {
-            var client = new HttpClient();
+            var request = CreateRequest(address);
 
-            var response = client.GetAsync($"http://ip-api.com/json/{address}?fields=status,message,country").GetAwaiter().GetResult();
+            var response = (HttpWebResponse)request.GetResponse();
 
-            client.Dispose();
-
-            if (!response.IsSuccessStatusCode)
+            if (response.StatusCode != HttpStatusCode.OK)
             {
                 Logger.LogError($"HTTP Error: {(int)response.StatusCode}, {response.StatusCode}");
                 return string.Empty;
             }
 
-            var content = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var content = ReadContent(response.GetResponseStream());
 
             var @object = JObject.Parse(content);
 
@@ -31,6 +30,18 @@ namespace Feli.RocketMod.JoinLeaveMessages.Helpers
             }
 
             return @object["country"].ToString();
+        }
+
+        internal static WebRequest CreateRequest(string address)
+        {
+            return WebRequest.Create($"http://ip-api.com/json/{address}?fields=status,message,country");
+        }
+
+        internal static string ReadContent(Stream stream)
+        {
+            using var reader = new StreamReader(stream);
+
+            return reader.ReadToEnd();
         }
     }
 }
