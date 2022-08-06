@@ -11,7 +11,7 @@
     <PackageDescription>Broadcast users connections and disconnections to the global chat</PackageDescription>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageAuthors>FPlugins;Felixer001</PackageAuthors>
-    <PackageOwners>FPlugins</PackageOwners>
+    <PackageOwners>FPlugins;Felixer001</PackageOwners>
     <PackageTags>openmod openmod-plugin unturned</PackageTags>
     <Version>0.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

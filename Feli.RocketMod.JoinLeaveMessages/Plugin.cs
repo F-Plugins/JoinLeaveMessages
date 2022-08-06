@@ -1,9 +1,12 @@
 ﻿using Feli.RocketMod.JoinLeaveMessages.Helpers;
 using Rocket.API.Collections;
 using Rocket.Core.Plugins;
+using Rocket.Core.Utils;
 using Rocket.Unturned;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
+using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using Logger = Rocket.Core.Logging.Logger;
 
@@ -19,10 +22,10 @@ namespace Feli.RocketMod.JoinLeaveMessages
 
         protected override void Load()
         {
-            if(Configuration.Instance.JoinMessages)
+            if (Configuration.Instance.JoinMessages)
                 U.Events.OnPlayerConnected += OnPlayerConnected;
 
-            if(Configuration.Instance.LeaveMessages)
+            if (Configuration.Instance.LeaveMessages)
                 U.Events.OnPlayerDisconnected += OnPlayerDisconnected;
 
             Logger.Log($"JoinLeaveMessages plugin v1.0.2 loaded !");
@@ -31,15 +34,28 @@ namespace Feli.RocketMod.JoinLeaveMessages
 
         private void OnPlayerConnected(UnturnedPlayer player)
         {
-            var country = string.Empty;
+            Task.Run(async () =>
+            {
+                try
+                {
+                    var country = string.Empty;
 
-            if (Configuration.Instance.ShowCountry)
-                country = IpGeolocationHelper.GetCountryFromIp(player.IP);
-  
-            var message = Translate("Join", player.DisplayName, country);
+                    if (Configuration.Instance.ShowCountry)
+                        country = await IpGeolocationHelper.GetCountryFromIp(player.IP);
 
-            Logger.Log(message);
-            ChatManager.serverSendMessage(message, Color.green, mode: EChatMode.GLOBAL, iconURL: Configuration.Instance.CustomImageUrl, useRichTextFormatting: true);
+                    var message = Translate("Join", player.DisplayName, country);
+
+                    TaskDispatcher.QueueOnMainThread(() =>
+                    {
+                        Logger.Log(message);
+                        ChatManager.serverSendMessage(message, Color.green, mode: EChatMode.GLOBAL, iconURL: Configuration.Instance.CustomImageUrl, useRichTextFormatting: true);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogException(ex, "There was an error during the player join");
+                }
+            });
         }
 
         private void OnPlayerDisconnected(UnturnedPlayer player)

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using System.IO;
-using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Feli.OpenMod.JoinLeaveMessages.Helpers
@@ -17,20 +16,18 @@ namespace Feli.OpenMod.JoinLeaveMessages.Helpers
 
         public async Task<string> GetCountryFromIpAsync(string address)
         {
-            var request = CreateRequest(address);
+            using var client = new HttpClient();
+            var response = await client.GetAsync($"http://ip-api.com/json/{address}?fields=status,message,country");
 
-            var response = (HttpWebResponse)await request.GetResponseAsync();
-
-            if (response.StatusCode != HttpStatusCode.OK)
+            if (!response.IsSuccessStatusCode)
             {
                 _logger.LogError("HTTP Error: {StatusCode}, {StatusCodeString}", (int)response.StatusCode, response.StatusCode.ToString());
                 return string.Empty;
             }
 
-            var content = await ReadContentAsync(response.GetResponseStream());
+            var content = await response.Content.ReadAsStringAsync();
 
             var @object = JObject.Parse(content);
-
             if (@object["status"].ToString() == "fail")
             {
                 _logger.LogError("Failed to get the ip location. Error: {message}", @object["message"].ToString());
@@ -38,18 +35,6 @@ namespace Feli.OpenMod.JoinLeaveMessages.Helpers
             }
 
             return @object["country"].ToString();
-        }
-
-        internal WebRequest CreateRequest(string address)
-        {
-            return WebRequest.Create($"http://ip-api.com/json/{address}?fields=status,message,country");
-        }
-
-        internal async Task<string> ReadContentAsync(Stream stream)
-        {
-            using var reader = new StreamReader(stream);
-
-            return await reader.ReadToEndAsync();
         }
     }
 }
