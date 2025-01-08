@@ -28,7 +28,7 @@ namespace Feli.RocketMod.JoinLeaveMessages
             if (Configuration.Instance.LeaveMessages)
                 U.Events.OnPlayerDisconnected += OnPlayerDisconnected;
 
-            Logger.Log($"JoinLeaveMessages plugin v1.0.2 loaded !");
+            Logger.Log($"JoinLeaveMessages plugin v1.0.4 loaded !");
             Logger.Log("Do you want more cool plugins? Join now: https://discord.gg/4FF2548 !");
         }
 
@@ -71,7 +71,7 @@ namespace Feli.RocketMod.JoinLeaveMessages
             U.Events.OnPlayerConnected -= OnPlayerConnected;
             U.Events.OnPlayerDisconnected -= OnPlayerDisconnected;
 
-            Logger.Log($"JoinLeaveMessages plugin v1.0.2 unloaded !");
+            Logger.Log($"JoinLeaveMessages plugin v1.0.4 unloaded !");
             Logger.Log("Do you want more cool plugins? Join now: https://discord.gg/4FF2548 !");
         }
     }
